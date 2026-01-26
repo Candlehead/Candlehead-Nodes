@@ -5,7 +5,7 @@ A comprehensive suite of utility nodes for ComfyUI image processing workflows.
 ## Nodes Included
 
 ### AspectToRes
-Converts aspect ratio text input to fixed width and height values.
+Converts aspect ratio text input to fixed width and height values for standard QWEN resolutions.
 
 **Input:** Aspect ratio string (e.g., "16:9", "4:3", "1:1")
 
