@@ -1,5 +1,5 @@
 """
-Candlehead Nodez - Nodes package
+Candlehead Nodes - Nodes package
 """
 
 __all__ = []

@@ -1,11 +1,11 @@
-# Candlehead Nodez - ComfyUI Custom Node Collection
+# Candlehead Nodes - ComfyUI Custom Node Collection
 
 A comprehensive suite of utility nodes for ComfyUI image processing workflows.
 
 ## Nodes Included
 
 ### AspectToRes
-Converts aspect ratio text input to fixed width and height values.
+Converts aspect ratio text input to fixed width and height values for standard QWEN resolutions.
 
 **Input:** Aspect ratio string (e.g., "16:9", "4:3", "1:1")
 
@@ -47,11 +47,34 @@ Simple text processing node for string manipulation.
 - capitalize
 - reverse
 
+### Wildcard Prompt
+Replaces ComfyUI-style `__name__` tokens in manually entered text with a
+random non-empty line from `P:\AI\Wildcards\name.txt`. Files in relative
+subfolders can be referenced with paths such as `__folder/name__`.
+
+**Input:** Prompt text
+
+**Output:** Text with wildcard entries inserted
+
+The seed input includes ComfyUI's standard **control after generate** options
+(randomize, increment, decrement, and fixed), with randomize as the default.
+
+### ResolutionCalculator
+Scales both dimensions by the selected multiple and reports the resulting dimensions.
+
+**Input:** Scale (`2x` or `4x`), optional image, Width Resolution, Height Resolution
+
+**Output:**
+- `width` (INT)
+- `height` (INT)
+- `Long Side` (INT) - the larger of the scaled width and height
+- `Short Side` (INT) - the smaller of the scaled width and height
+
 ## Installation
 
 1. Copy this folder to your ComfyUI `custom_nodes` directory:
    ```bash
-   cp -r Candlehead-Nodez /path/to/ComfyUI/custom_nodes/
+   cp -r Candlehead-Nodes /path/to/ComfyUI/custom_nodes/
    ```
 
 2. Restart ComfyUI
@@ -66,13 +89,14 @@ Simple text processing node for string manipulation.
 ## Project Structure
 
 ```
-candlehead-nodez/
+candlehead-nodes/
 ├── __init__.py           # Main node registration
 ├── nodes/
 │   ├── __init__.py
 │   ├── aspect_converter.py
 │   ├── image_info.py
-│   └── text_processor.py
+│   ├── text_processor.py
+│   └── wildcard_prompt.py
 └── README.md
 ```
 

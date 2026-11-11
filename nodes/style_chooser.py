@@ -24,6 +24,7 @@ class StyleChooserNode:
                         "Frank Frazetta",
                         "George Hurrell",
                         "Humberto Ramos",
+                        "Earle Bergey"
                     ],
                     {"default": "Modern Comic Book Art"}
                 ),
@@ -42,12 +43,14 @@ class StyleChooserNode:
         style_map = {
             "Modern Comic Book Art": "modern comic book art style,",
             "Anime": "anime art style,",
+            "Claymation": "claymation art style,",
             "Gil Elvgren": "art style of Gil Elvgren,",
             "Boris Vallejo": "art style of Boris Vallejo,",
             "Casey Baugh": "art style of Casey Baugh,",
             "Frank Frazetta": "art style of Frank Frazetta,",
             "George Hurrell": "art style of George Hurrell,",
             "Humberto Ramos": "art style of Humberto Ramos,",
+            "Earle Bergey": "art style of Earle Bergey,",
         }
         
         style_text = style_map.get(style, "modern comic book art style,")
