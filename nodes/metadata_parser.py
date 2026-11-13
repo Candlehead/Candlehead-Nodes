@@ -25,7 +25,7 @@ class MetadataParseFromText:
         }
     
     RETURN_TYPES = ("STRING", "STRING", "STRING", "FLOAT", "INT", "STRING", "STRING", "STRING", "INT", "INT")
-    RETURN_NAMES = ("Prompt", "VAE Name", "Checkpoint", "CFG", "Steps", "Sampler Name", "Scheduler", "Summary", "Height", "Width")
+    RETURN_NAMES = ("Prompt", "VAE Name", "Checkpoint/Unet", "CFG", "Steps", "Sampler Name", "Scheduler", "Summary", "Height", "Width")
     FUNCTION = "parse_metadata"
     CATEGORY = "text/metadata"
     OUTPUT_NODE = True
@@ -61,6 +61,10 @@ class MetadataParseFromText:
         checkpoint_match = re.search(r'"?ckpt_name"?\s*:\s*["\']([^"\']+)["\']', text, re.IGNORECASE)
         if checkpoint_match:
             checkpoint_name = checkpoint_match.group(1).strip()
+        if not checkpoint_name:
+            unet_match = re.search(r'"?unet_name"?\s*:\s*["\']([^"\']+)["\']', text, re.IGNORECASE)
+            if unet_match:
+                checkpoint_name = unet_match.group(1).strip()
         
         # Parse CFG - text in quotes following "cfg":
         # Pattern: "cfg": "value" - extract numeric value
