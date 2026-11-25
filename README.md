@@ -59,6 +59,18 @@ subfolders can be referenced with paths such as `__folder/name__`.
 The seed input includes ComfyUI's standard **control after generate** options
 (randomize, increment, decrement, and fixed), with randomize as the default.
 
+### Sequential Wildcards
+Replaces ComfyUI-style `__name__` tokens with successive non-empty lines from
+`P:\AI\Wildcards\name.txt`, starting at the top and wrapping back to the first
+line after the last. Each wildcard file maintains its own position for the
+lifetime of the node in memory; restarting ComfyUI starts again at the top.
+Files in relative subfolders can be referenced with paths such as
+`__folder/name__`.
+
+**Input:** Prompt text
+
+**Output:** Text with wildcard entries inserted
+
 ### ResolutionCalculator
 Scales both dimensions by the selected multiple and reports the resulting dimensions.
 
