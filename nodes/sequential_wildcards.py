@@ -14,8 +14,7 @@ WILDCARD_PATTERN = re.compile(r"__(.+?)__")
 class SequentialWildcardsNode:
     """Replaces wildcard tokens with successive entries from their files."""
 
-    def __init__(self):
-        self._cursors = {}
+    _cursors = {}
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -23,6 +22,7 @@ class SequentialWildcardsNode:
             "required": {
                 "text": ("STRING", {"multiline": True, "default": ""}),
             },
+            "hidden": {"unique_id": "UNIQUE_ID"},
         }
 
     RETURN_TYPES = ("STRING",)
@@ -30,7 +30,7 @@ class SequentialWildcardsNode:
     FUNCTION = "process_prompt"
     CATEGORY = "text"
 
-    def process_prompt(self, text):
+    def process_prompt(self, text, unique_id):
         """Resolve each __name__ token using the next name.txt entry."""
 
         def replace_wildcard(match):
@@ -57,8 +57,9 @@ class SequentialWildcardsNode:
             if not choices:
                 raise ValueError(f"Wildcard file contains no entries: {wildcard_file}")
 
-            cursor = self._cursors.get(wildcard_file, 0)
-            self._cursors[wildcard_file] = cursor + 1
+            cursor_key = (unique_id, wildcard_file)
+            cursor = self._cursors.get(cursor_key, 0)
+            self._cursors[cursor_key] = cursor + 1
             return choices[cursor % len(choices)]
 
         return (WILDCARD_PATTERN.sub(replace_wildcard, text),)

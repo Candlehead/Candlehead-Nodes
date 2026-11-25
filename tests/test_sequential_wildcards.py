@@ -25,18 +25,34 @@ class SequentialWildcardsNodeTests(unittest.TestCase):
         )
 
         results = [
-            self.node.process_prompt("__people__")[0]
+            self.node.process_prompt("__people__", unique_id="node-1")[0]
             for _ in range(4)
         ]
 
         self.assertEqual(results, ["Alice", "Bob", "Carol", "Alice"])
+
+    def test_advances_across_recreated_node_instances(self):
+        (self.wildcard_directory / "people.txt").write_text(
+            "Alice\nBob\nCarol\n", encoding="utf-8"
+        )
+
+        results = [
+            SequentialWildcardsNode().process_prompt(
+                "__people__", unique_id="node-1"
+            )[0]
+            for _ in range(3)
+        ]
+
+        self.assertEqual(results, ["Alice", "Bob", "Carol"])
 
     def test_repeated_tokens_consume_successive_entries(self):
         (self.wildcard_directory / "people.txt").write_text(
             "Alice\nBob\nCarol\n", encoding="utf-8"
         )
 
-        result = self.node.process_prompt("__people__ and __people__")
+        result = self.node.process_prompt(
+            "__people__ and __people__", unique_id="node-1"
+        )
 
         self.assertEqual(result, ("Alice and Bob",))
 
@@ -48,8 +64,12 @@ class SequentialWildcardsNodeTests(unittest.TestCase):
             "Paris\nRome\n", encoding="utf-8"
         )
 
-        first_result = self.node.process_prompt("__people__ in __places__")
-        second_result = self.node.process_prompt("__people__ in __places__")
+        first_result = self.node.process_prompt(
+            "__people__ in __places__", unique_id="node-1"
+        )
+        second_result = self.node.process_prompt(
+            "__people__ in __places__", unique_id="node-1"
+        )
 
         self.assertEqual(first_result, ("Alice in Paris",))
         self.assertEqual(second_result, ("Bob in Rome",))
@@ -58,19 +78,21 @@ class SequentialWildcardsNodeTests(unittest.TestCase):
         (self.wildcard_directory / "people.txt").write_text(
             "Alice\nBob\n", encoding="utf-8"
         )
-        self.node.process_prompt("__people__")
+        self.node.process_prompt("__people__", unique_id="node-1")
 
         new_node = SequentialWildcardsNode()
 
-        self.assertEqual(new_node.process_prompt("__people__"), ("Alice",))
+        self.assertEqual(
+            new_node.process_prompt("__people__", unique_id="node-2"), ("Alice",)
+        )
 
     def test_raises_for_missing_wildcard_file(self):
         with self.assertRaisesRegex(FileNotFoundError, "Wildcard file not found"):
-            self.node.process_prompt("__missing__")
+            self.node.process_prompt("__missing__", unique_id="node-1")
 
     def test_rejects_paths_outside_wildcard_directory(self):
         with self.assertRaisesRegex(ValueError, "must stay inside"):
-            self.node.process_prompt("__..\\outside__")
+            self.node.process_prompt("__..\\outside__", unique_id="node-1")
 
 
 if __name__ == "__main__":

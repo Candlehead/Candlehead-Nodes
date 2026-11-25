@@ -62,8 +62,8 @@ The seed input includes ComfyUI's standard **control after generate** options
 ### Sequential Wildcards
 Replaces ComfyUI-style `__name__` tokens with successive non-empty lines from
 `P:\AI\Wildcards\name.txt`, starting at the top and wrapping back to the first
-line after the last. Each wildcard file maintains its own position for the
-lifetime of the node in memory; restarting ComfyUI starts again at the top.
+line after the last. Each ComfyUI node keeps its own position per wildcard file
+across executions; restarting ComfyUI starts again at the top.
 Files in relative subfolders can be referenced with paths such as
 `__folder/name__`.
 
